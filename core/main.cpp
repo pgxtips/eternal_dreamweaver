@@ -4,7 +4,7 @@
 
 int main(void) {
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 600;
 
     SetConfigFlags(FLAG_WINDOW_HIGHDPI);
     InitWindow(screenWidth, screenHeight, "Eternal Dreamweaver");
@@ -28,10 +28,12 @@ int main(void) {
             ClearBackground(RAYWHITE);
             DrawText("Eternal Dreamweaver", 190, 200, 20, BLACK);
 
-            debug.beginFrame();
-            debug.draw(dt, fps, sceneName);
-            debug.endFrame();
-         
+            // nothing below this point  
+            if (debug.enabled) {
+                debug.beginFrame();
+                debug.draw(dt, fps, sceneName);
+                debug.endFrame();
+            }
         EndDrawing();
     }
 
