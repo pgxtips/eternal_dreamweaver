@@ -1,4 +1,6 @@
 #include "raylib.h"
+#include "debug_overlay.hpp"
+#include <string>
 
 int main(void) {
     const int screenWidth = 800;
@@ -8,8 +10,16 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "Eternal Dreamweaver");
     SetTargetFPS(60);
 
+    DebugOverlay debug;
+    debug.init();
+    
+    std::string sceneName = "MainMenu";
+
     // game loop
     while (!WindowShouldClose()) {
+        float dt = GetFrameTime();
+        int fps = GetFPS();
+
         // update
         // ...
 
@@ -17,7 +27,11 @@ int main(void) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawText("Eternal Dreamweaver", 190, 200, 20, BLACK);
-            DrawFPS(screenWidth - 80, screenHeight - 25);
+
+            debug.beginFrame();
+            debug.draw(dt, fps, sceneName);
+            debug.endFrame();
+         
         EndDrawing();
     }
 
