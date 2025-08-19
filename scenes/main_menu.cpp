@@ -1,3 +1,4 @@
+#include "core/lattice_bg.hpp"
 #include "core/scene.hpp"
 #include "core/scene_manager.hpp"
 #include "core/app_context.hpp"
@@ -5,11 +6,17 @@
 
 namespace {
 struct MainMenuScene : IScene {
+    Font uiFont{};
+    LatticeBG bg;
+
     const char* name() const override {return "MainMenu"; }
 
     // lifecycle
     void onEnter() override {
         SetTraceLogLevel(LOG_DEBUG);
+
+        auto& app = AppContext::Instance();
+        bg.init(app.screenW()+50, app.screenH()+50);
 
         uiFont = LoadFontEx("assets/ArcaneWhispersPersonalUseRegular-j9J80.ttf", 128, nullptr, 0);
         GenTextureMipmaps(&uiFont.texture);
@@ -25,7 +32,11 @@ struct MainMenuScene : IScene {
 
     // per-frame
     void handleInput() override {}
-    void update() override {}
+    void update() override {
+        auto& app = AppContext::Instance();
+        bg.resize(app.screenW(), app.screenH());
+        bg.update(app.dt());
+    }
 
     static inline Vector2 TextSize(Font f, const char* txt, float size, float spacing = 1.0f) {
         return MeasureTextEx(f, txt, size, spacing);
@@ -46,6 +57,7 @@ struct MainMenuScene : IScene {
         int ty = (int)(80 * s);
 
         ClearBackground({10,12,24,255});
+        bg.draw();
 
         // integer pixels
         auto ip = [](float v){ return (float)((int)std::round(v)); };
@@ -67,7 +79,6 @@ struct MainMenuScene : IScene {
 
     bool blocksBelow() override {return false;}
 
-    Font uiFont{};
 };
 } // namespace
 

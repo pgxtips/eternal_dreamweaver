@@ -14,7 +14,7 @@ int main(void) {
 
     SetConfigFlags(FLAG_WINDOW_HIGHDPI | FLAG_FULLSCREEN_MODE);
     InitWindow(screenWidth, screenHeight, "Eternal Dreamweaver");
-    SetTargetFPS(60);
+    /*SetTargetFPS(240);*/
 
     AppContext::Instance().Init(GetScreenWidth(), GetScreenHeight(),
                             nullptr, nullptr);
