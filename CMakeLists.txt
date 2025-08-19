@@ -74,6 +74,11 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/scenes/*.cpp
 )
 
-add_executable(eternal_dreamweaver core/main.cpp)
+add_executable(eternal_dreamweaver ${SOURCES})
+target_include_directories(eternal_dreamweaver PRIVATE
+  ${CMAKE_SOURCE_DIR}
+  ${imgui_SOURCE_DIR}
+  ${rlimgui_SOURCE_DIR}
+)
 
 target_link_libraries(eternal_dreamweaver PRIVATE raylib rlImGui)

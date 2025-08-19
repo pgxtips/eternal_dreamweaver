@@ -1,39 +1,54 @@
 #include "raylib.h"
-#include "debug_overlay.hpp"
-#include <string>
+
+#include "scenes/register_scenes.hpp"
+#include "core/scene_manager.hpp"
+#include "core/debug_overlay.hpp"
+#include "core/app_context.hpp"
 
 int main(void) {
-    const int screenWidth = 800;
-    const int screenHeight = 600;
+    /*const int screenWidth = 1920;*/
+    /*const int screenHeight = 1080;*/
 
-    SetConfigFlags(FLAG_WINDOW_HIGHDPI);
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+
+    SetConfigFlags(FLAG_WINDOW_HIGHDPI | FLAG_FULLSCREEN_MODE);
     InitWindow(screenWidth, screenHeight, "Eternal Dreamweaver");
     SetTargetFPS(60);
 
+    AppContext::Instance().Init(GetScreenWidth(), GetScreenHeight(),
+                            nullptr, nullptr);
     DebugOverlay debug;
     debug.init();
     
-    std::string sceneName = "MainMenu";
+    SceneManager sm;
+
+    RegisterMainMenu(sm);
+
+    sm.set(SceneID::MainMenu);
 
     // game loop
     while (!WindowShouldClose()) {
-        float dt = GetFrameTime();
-        int fps = GetFPS();
 
-        // update
-        // ...
+        AppContext::Instance().SetDelta(GetFrameTime());
+        if (IsWindowResized()) {
+            AppContext::Instance().Init(GetScreenWidth(), GetScreenHeight(),
+                    AppContext::Instance().world(),
+                    AppContext::Instance().renderer());
+        }
 
-        // draw
+        sm.handleInput();
+        sm.update();
+
         BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("Eternal Dreamweaver", 190, 200, 20, BLACK);
 
-            // nothing below this point  
-            if (debug.enabled) {
-                debug.beginFrame();
-                debug.draw(dt, fps, sceneName);
-                debug.endFrame();
-            }
+        sm.draw();
+        // nothing below this point  
+        if (debug.enabled) {
+            debug.beginFrame();
+            debug.draw(GetFrameTime(), GetFPS(), sm.currentSceneName());
+            debug.endFrame();
+        }
         EndDrawing();
     }
 
