@@ -36,7 +36,7 @@ struct MainMenuScene : IScene {
         auto& app = AppContext::Instance();
         int W = app.screenW(), H = app.screenH();
 
-        const float baseH = 720.0f;          // simple DPI scaling
+        const float baseH = 720.0f;
         float s = H / baseH;
 
         const char* title = "ETERNAL DREAMWEAVER";
@@ -47,8 +47,9 @@ struct MainMenuScene : IScene {
 
         ClearBackground({10,12,24,255});
 
-        // optional shadow
+        // integer pixels
         auto ip = [](float v){ return (float)((int)std::round(v)); };
+
         DrawTextEx(uiFont, title, { ip(tx)+2, ip(ty)+2 }, titleSize, 1, Color{0,0,0,120});
         DrawTextEx(uiFont, title, {ip(tx), ip(ty)}, titleSize, 1, RAYWHITE);
 
